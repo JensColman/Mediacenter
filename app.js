@@ -8,6 +8,9 @@ const {app, BrowserWindow, Menu, ipcMain} = electron;
 // Live reload for Electron
 require('electron-reload')(__dirname);
 
+// Set env
+process.env.NODE_ENV = 'development';
+
 let mainWindow;
 
 // Listen for the app to be ready
