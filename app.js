@@ -129,6 +129,8 @@ function getFiles(dir, file) {
     return file;
 }
 
+
+
 // Open Upload dialog
 const showOpen = function () {
     dialog.showOpenDialog({

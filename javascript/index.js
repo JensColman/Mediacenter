@@ -5,12 +5,6 @@ const column = document.querySelectorAll('.column');
 let elements = document.querySelectorAll('.element');
 
 ipcRenderer.on('ping', (event, message) => {
-
-        for (let i=0; i<message.length; i++) {
-            if (!message[i].match(/.(jpg|jpeg|png|gif|bmp|webp)$/i) || message[i].match(/.(m4v|mpg|mp4|webm)$/i)) {
-                message.splice(i, 1);
-            }  
-        }
         
     let itemCounter = 0;
 
@@ -22,9 +16,7 @@ ipcRenderer.on('ping', (event, message) => {
                 if (elem.match(/.(jpg|jpeg|png|gif|bmp|webp)$/i)) {
                     column[place].innerHTML += `<img class="element" src="${elem}">`;
                     // row.innerHTML += `<li class="source element">${elem}</li>`;
-                }
-
-                if (elem.match(/.(m4v|mpg|mp4|webm)$/i)) {
+                } else if (elem.match(/.(m4v|mpg|mp4|webm|mov)$/i)) {
                     column[place].innerHTML += `<video class="element" controls><source src="${elem}">Video is not supported.</video>`;
                     // row.innerHTML += `<li class="source element">${elem}</li>`;
                 }
@@ -42,20 +34,28 @@ ipcRenderer.on('ping', (event, message) => {
 
         function getContent() {
             elements = document.querySelectorAll('.element');
+            let toggleStyle = document.querySelector('#toggleStyle');
             console.log(elements);
+            let toggled = false;
             elements.forEach((item) => {
                 // console.log(item);
                 item.addEventListener('click', () => {
-                        item.classList.toggle('fullscreen');
-                        document.body.classList.toggle('scrolLock');
-                    // if (item.tagName === 'VIDEO') {
-                    //     console.log('ksfghdkljg');
-                    //     if (item.hasAttribute("controls")) {
-                    //         item.removeAttribute("controls")
-                    //     } else {
-                    //         item.setAttribute("controls", "controls")
-                    //     }
-                    // }
+                    item.classList.toggle('fullscreen');
+                    document.body.classList.toggle('scrolLock');
+
+                    function addStyleString(str) {
+                        toggleStyle.innerHTML = str;
+                        document.body.appendChild(toggleStyle);
+                    }
+
+                    if (toggled === false) {
+                        addStyleString('video::-webkit-media-controls { bottom: 5vh; position: relative; } video::-webkit-media-controls-panel { background-image: linear-gradient(transparent, transparent) !important; }');
+                        toggled = true;
+                    } else {
+                        toggleStyle.innerHTML = '';
+                        toggled = false;
+                    }
+
                 })
             });
         }

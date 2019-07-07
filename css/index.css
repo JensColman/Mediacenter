@@ -89,3 +89,12 @@ body {
 /* video {
     pointer-events: none;
 } */
+
+/* video::-webkit-media-controls {
+    bottom: 5vh;
+    position: relative;
+} */
+
+/* video::-webkit-media-controls-panel {
+  background-image: linear-gradient(transparent, transparent) !important;
+} */
