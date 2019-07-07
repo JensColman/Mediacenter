@@ -1,0 +1,21 @@
+body {
+    font-family: helvetica;
+}
+
+#content {
+    margin-top: 10vh;
+}
+
+.element {
+    width: 80vw;
+    position: relative;
+    left: 50%;
+    right: 50%;
+    transform: translate(-50%)
+}
+
+.source {
+    font-size: 0.6em;
+    opacity: 0.5;
+    margin-bottom: 10px;
+}
