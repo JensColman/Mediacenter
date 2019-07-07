@@ -42,13 +42,18 @@ app.on('ready', () => {
 function dirList() {
     // Load content into HTML
     mainWindow.webContents.on('did-finish-load', () => {
-        dirsToSend[0]();
+        
+        // for (var key in dirsToSend) {
+        //     console.log(dirsToSend[key]);
+        // }
+
+        dirsToSend['dir1']();
     });
 }
 
 // Create a list of directories to load into the content
 let dirsToSend = {
-    0: function() {
+    'dir1': function() {
         return mainWindow.webContents.send('ping', getFiles(pathToFollow));
     }
 };
@@ -67,6 +72,13 @@ const topMenu = [
                     showOpen();
                 }
             },
+            // {
+            //     label: 'Add a directory...',
+            //     accelerator: process.platform == 'darwin' ? 'command+shift+O' : 'ctrl+shift+O',
+            //     click() {
+            //         showMore();
+            //     }
+            // },
             {
                 label: 'Quit',
                 accelerator: process.platform == 'darwin' ? 'command+Q' : 'ctrl+Q',
@@ -131,6 +143,30 @@ const showOpen = function () {
         function(files) {
             if (files !== undefined) {
                 pathToFollow = files.toString();
+                mainWindow.reload();
+            }
+        }
+    );
+};
+
+const showMore = function () {
+    dialog.showOpenDialog({
+        filters: [
+            { name: 'Folders', extensions: [''] }
+        ],
+        properties: [
+            'openFile',
+            'openDirectory',
+            'createDirectory'
+        ]
+    },
+        function (files) {
+            if (files !== undefined) {
+                // pathToFollow = files.toString();
+                dirsToSend.dir2 = function() {
+                    return mainWindow.webContents.send('ping', getFiles(files.toString()));
+                };
+
                 mainWindow.reload();
             }
         }
