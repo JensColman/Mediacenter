@@ -1,5 +1,5 @@
 const electron = require('electron');
-const { ipcRenderer } = electron;
+const {ipcRenderer} = electron;
 const row = document.querySelector('.row');
 const column = document.querySelectorAll('.column');
 let elements = document.querySelectorAll('.element');
@@ -46,10 +46,13 @@ ipcRenderer.on('ping', (event, message) => {
             elements.forEach((item) => {
                 // console.log(item);
                 item.addEventListener('click', () => {
-                    console.log('Pressed the button', item);
+                    if (item.src.match(/.(jpg|jpeg|png|gif|bmp)$/i)) {
+                        item.classList.toggle('fullscreen');
+                        document.body.classList.toggle('scrolLock');
+                    }
                     
                 })
-            })
+            });
         }
 
         await getContent();
