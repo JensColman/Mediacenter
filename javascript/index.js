@@ -7,7 +7,7 @@ let elements = document.querySelectorAll('.element');
 ipcRenderer.on('ping', (event, message) => {
 
         for (let i=0; i<message.length; i++) {
-            if (!message[i].match(/.(jpg|jpeg|png|gif|bmp)$/i) || message[i].match(/.(m4v|mpg|mp4|webm)$/i)) {
+            if (!message[i].match(/.(jpg|jpeg|png|gif|bmp|webp)$/i) || message[i].match(/.(m4v|mpg|mp4|webm)$/i)) {
                 message.splice(i, 1);
             }  
         }
@@ -19,7 +19,7 @@ ipcRenderer.on('ping', (event, message) => {
         for (const elem of array) {
 
             function placeContent(place) {
-                if (elem.match(/.(jpg|jpeg|png|gif|bmp)$/i)) {
+                if (elem.match(/.(jpg|jpeg|png|gif|bmp|webp)$/i)) {
                     column[place].innerHTML += `<img class="element" src="${elem}">`;
                     // row.innerHTML += `<li class="source element">${elem}</li>`;
                 }
