@@ -71,9 +71,9 @@ body {
 }
 
 .fullscreen {
-    position: absolute;
-    width: 100vw;
-    height: 100vh;
+    position: fixed;
+    width: 105vw;
+    height: 105vh;
     object-fit: contain;
     top: 50%;
     left: 50%;

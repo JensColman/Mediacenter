@@ -46,11 +46,16 @@ ipcRenderer.on('ping', (event, message) => {
             elements.forEach((item) => {
                 // console.log(item);
                 item.addEventListener('click', () => {
-                    if (item.src.match(/.(jpg|jpeg|png|gif|bmp)$/i)) {
                         item.classList.toggle('fullscreen');
                         document.body.classList.toggle('scrolLock');
-                    }
-                    
+                    // if (item.tagName === 'VIDEO') {
+                    //     console.log('ksfghdkljg');
+                    //     if (item.hasAttribute("controls")) {
+                    //         item.removeAttribute("controls")
+                    //     } else {
+                    //         item.setAttribute("controls", "controls")
+                    //     }
+                    // }
                 })
             });
         }
