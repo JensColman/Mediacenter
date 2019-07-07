@@ -4,7 +4,7 @@ const path = require('path');
 const fs = require('fs');
 const multer = require('multer');
 
-const {app, BrowserWindow, Menu, ipcMain} = electron;
+const {app, BrowserWindow, Menu, ipcMain, dialog} = electron;
 // Live reload for Electron
 require('electron-reload')(__dirname);
 
@@ -12,6 +12,7 @@ require('electron-reload')(__dirname);
 process.env.NODE_ENV = 'development';
 
 let mainWindow;
+let pathToFollow = path.join(__dirname, 'images');
 
 // Listen for the app to be ready
 app.on('ready', () => {
@@ -21,6 +22,7 @@ app.on('ready', () => {
             nodeIntegration: true
         }
     });
+
     // Load HTML into window
     mainWindow.loadURL(url.format({
         pathname: path.join(__dirname, 'html/mainWindow.html'),
@@ -33,12 +35,23 @@ app.on('ready', () => {
     // Insert menu
     Menu.setApplicationMenu(mainMenu);
 
-    // Load content into HTML
-    mainWindow.webContents.on('did-finish-load', () => {
-        mainWindow.webContents.send('ping', getFiles(path.join(__dirname, 'images')));
-    });
+    dirList();
     
 });
+
+function dirList() {
+    // Load content into HTML
+    mainWindow.webContents.on('did-finish-load', () => {
+        dirsToSend[0]();
+    });
+}
+
+// Create a list of directories to load into the content
+let dirsToSend = {
+    0: function() {
+        return mainWindow.webContents.send('ping', getFiles(pathToFollow));
+    }
+};
 
 
 
@@ -47,6 +60,13 @@ const topMenu = [
     {
         label: 'File',
         submenu: [
+            {
+                label: 'Open...',
+                accelerator: process.platform == 'darwin' ? 'command+O' : 'ctrl+O',
+                click() {
+                    showOpen();
+                }
+            },
             {
                 label: 'Quit',
                 accelerator: process.platform == 'darwin' ? 'command+Q' : 'ctrl+Q',
@@ -96,3 +116,39 @@ function getFiles(dir, file) {
     }
     return file;
 }
+
+// Open Upload dialog
+const showOpen = function () {
+    dialog.showOpenDialog({
+        filters: [
+            { name: 'Folders', extensions: [''] }
+        ],
+        properties: [
+            'openFile', 
+            'openDirectory', 
+            'createDirectory'
+        ]}, 
+        function(files) {
+            if (files !== undefined) {
+                pathToFollow = files.toString();
+                mainWindow.reload();
+            }
+        }
+    );
+};
+
+// Set storage engine for Multer
+const storage = multer.diskStorage({
+    destination: function (req, file, cb) {
+        cb(null, './images/');
+    },
+    filename: function (req, file, cb) {
+        console.log(file);
+        cb(null, file.fieldname + '-' + Date.now() + path.extname(file.originalname));
+    }
+});
+
+// Init upload
+const upload = multer({
+    storage: storage
+});
