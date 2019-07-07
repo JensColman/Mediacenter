@@ -2,6 +2,7 @@ const electron = require('electron');
 const url = require('url');
 const path = require('path');
 const fs = require('fs');
+const multer = require('multer');
 
 const {app, BrowserWindow, Menu, ipcMain} = electron;
 // Live reload for Electron
@@ -19,7 +20,7 @@ app.on('ready', () => {
     });
     // Load HTML into window
     mainWindow.loadURL(url.format({
-        pathname: path.join(__dirname, 'mainWindow.html'),
+        pathname: path.join(__dirname, 'html/mainWindow.html'),
         protocol: 'file',
         slashes: true
     }));
@@ -43,12 +44,6 @@ const topMenu = [
     {
         label: 'File',
         submenu: [
-            {
-                label: 'Add item'
-            },
-            {
-                label: 'Remove item'
-            },
             {
                 label: 'Quit',
                 accelerator: process.platform == 'darwin' ? 'command+Q' : 'ctrl+Q',
@@ -83,8 +78,6 @@ if (process.env.NODE_ENV !== 'production') {
         ]
     });
 }
-
-
 
 // Read all files in directory
 function getFiles(dir, file) {
