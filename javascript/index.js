@@ -66,3 +66,9 @@ ipcRenderer.on('ping', (event, message) => {
     processMessages(message);
 
 });
+
+function pageScroll() {
+    window.scrollBy(0, 1);
+    scrolldelay = setTimeout(pageScroll, 10);
+}
+// pageScroll();

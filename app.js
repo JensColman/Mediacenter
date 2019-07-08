@@ -43,20 +43,22 @@ function dirList() {
     // Load content into HTML
     mainWindow.webContents.on('did-finish-load', () => {
         
-        // for (var key in dirsToSend) {
-        //     console.log(dirsToSend[key]);
-        // }
-
-        dirsToSend['dir1']();
+        for (let obj in dirsToSend) {
+            dirsToSend[obj]();
+        }
     });
 }
 
 // Create a list of directories to load into the content
 let dirsToSend = {
-    'dir1': function() {
-        return mainWindow.webContents.send('ping', getFiles(pathToFollow));
+    'dir0': function() {
+        return mainWindow.webContents.send('ping', getFiles(dirsArray[0]));
     }
 };
+
+let dirsArray = [
+    pathToFollow
+];
 
 
 
@@ -72,18 +74,30 @@ const topMenu = [
                     showOpen();
                 }
             },
-            // {
-            //     label: 'Add a directory...',
-            //     accelerator: process.platform == 'darwin' ? 'command+shift+O' : 'ctrl+shift+O',
-            //     click() {
-            //         showMore();
-            //     }
-            // },
+            {
+                label: 'Add a directory...',
+                accelerator: process.platform == 'darwin' ? 'command+shift+O' : 'ctrl+shift+O',
+                click() {
+                    showMore();
+                }
+            },
             {
                 label: 'Quit',
                 accelerator: process.platform == 'darwin' ? 'command+Q' : 'ctrl+Q',
                 click() {
                     app.quit();
+                }
+            }
+        ]
+    },
+    {
+        label: 'View',
+        submenu: [
+            {
+                label: 'Auto scroll',
+                accelerator: process.platform == 'darwin' ? 'command+L' : 'ctrl+L',
+                click() {
+                    // showOpen();
                 }
             }
         ]
@@ -145,6 +159,17 @@ const showOpen = function () {
         function(files) {
             if (files !== undefined) {
                 pathToFollow = files.toString();
+
+                dirsToSend = {
+                    'dir0': function () {
+                        return mainWindow.webContents.send('ping', getFiles(dirsArray[0]));
+                    }
+                };
+
+                dirsArray = [
+                    pathToFollow
+                ];
+
                 mainWindow.reload();
             }
         }
@@ -164,11 +189,24 @@ const showMore = function () {
     },
         function (files) {
             if (files !== undefined) {
-                // pathToFollow = files.toString();
-                dirsToSend.dir2 = function() {
-                    return mainWindow.webContents.send('ping', getFiles(files.toString()));
+                pathToFollow = files.toString();
+                dirsArray.push(files.toString());
+
+                let i = 0;
+                let j = 0;
+                for (let obj in dirsToSend) {
+                    i++;
+                    j++;
+                }
+
+                let dirName = `dir${i}`;
+
+                dirsToSend[dirName] = function() {
+                    return mainWindow.webContents.send('ping', getFiles(dirsArray[j]));
                 };
 
+                console.log(files.toString());
+                
                 mainWindow.reload();
             }
         }
