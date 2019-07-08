@@ -7,22 +7,28 @@ let elements = document.querySelectorAll('.element');
 
 let toggled = false;
 let autoScrolling = false;
+let contentArray = [];
 
 ipcRenderer.on('ping', (event, message) => {
         
     let itemCounter = 0;
+    // console.log(message);
 
     async function processMessages(array) {
 
         for (const elem of array) {
 
             function placeContent(place) {
+
+                if (elem.match(/.(jpg|jpeg|png|gif|bmp|webp|m4v|mpg|mp4|webm|mov)$/i)) {
+                    contentArray.push(elem);
+                    // console.log('contentArray:', contentArray);
+                }
+
                 if (elem.match(/.(jpg|jpeg|png|gif|bmp|webp)$/i)) {
                     column[place].innerHTML += `<img class="element" src="${elem}">`;
-                    // row.innerHTML += `<li class="source element">${elem}</li>`;
                 } else if (elem.match(/.(m4v|mpg|mp4|webm|mov)$/i)) {
                     column[place].innerHTML += `<video class="element" controls><source src="${elem}">Video is not supported.</video>`;
-                    // row.innerHTML += `<li class="source element">${elem}</li>`;
                 }
 
                 if (place === 3) {
