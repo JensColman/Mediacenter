@@ -13,6 +13,7 @@ process.env.NODE_ENV = 'development';
 
 let mainWindow;
 let pathToFollow = path.join(__dirname, 'images');
+let autoScroll = true;
 
 // Listen for the app to be ready
 app.on('ready', () => {
@@ -97,7 +98,7 @@ const topMenu = [
                 label: 'Auto scroll',
                 accelerator: process.platform == 'darwin' ? 'command+L' : 'ctrl+L',
                 click() {
-                    // showOpen();
+                    mainWindow.webContents.executeJavaScript("pageScroll();");
                 }
             }
         ]
