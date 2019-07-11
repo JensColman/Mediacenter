@@ -27,10 +27,14 @@ ipcRenderer.on('ping', (event, message) => {
 
                 if (elem.match(/.(jpg|jpeg|png|gif|bmp|webp)$/i)) {
                     column[place].innerHTML += `<img class="element" src="${elem}">`;
+                    placement(place);
                 } else if (elem.match(/.(m4v|mpg|mp4|webm|mov)$/i)) {
                     column[place].innerHTML += `<video class="element" controls><source src="${elem}">Video is not supported.</video>`;
+                    placement(place);
                 }
+            }
 
+            function placement(place) {
                 if (place === 3) {
                     itemCounter = 0;
                 } else {
@@ -122,3 +126,9 @@ function pageScroll() {
         autoScrolling = false;
     }
 }
+
+function defaultMainPage() {
+    document.body.innerHTML = `<h3>Press ${process.platform == 'darwin' ? '&#8984+O' : 'Ctrl+O'} to open your favorite photos and videos.</h3>`;
+}
+
+// defaultMainPage();

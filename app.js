@@ -36,6 +36,10 @@ app.on('ready', () => {
     // Insert menu
     Menu.setApplicationMenu(mainMenu);
 
+    if (pathToFollow === path.join(__dirname, 'images')) {
+        mainWindow.webContents.executeJavaScript("defaultMainPage();");
+    }
+
     dirList();
     
 });
