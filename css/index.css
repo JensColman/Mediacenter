@@ -87,6 +87,25 @@ body {
     overflow: hidden;
 }
 
+#contentNavigation {
+    display: none;
+}
+
+#previousContent, #nextContent  {
+    top: 50%;
+    transform: translate(0, -50%);
+    position: fixed;
+    z-index: 200;
+}
+
+#previousContent {
+    left: 30px;
+}
+
+#nextContent {
+    right: 30px;
+}
+
 /* video {
     pointer-events: none;
 } */

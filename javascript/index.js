@@ -45,8 +45,12 @@ ipcRenderer.on('ping', (event, message) => {
         function getContent() {
             elements = document.querySelectorAll('.element');
             let toggleStyle = document.querySelector('#toggleStyle');
+            let contentNavigation = document.querySelector('#contentNavigation');
+            let previousContent = document.querySelector('#previousContent');
+            let nextContent = document.querySelector('#nextContent');
             console.log(elements);
-            elements.forEach((item) => {
+
+            elements.forEach((item, index) => {
                 // console.log(item);
                 item.addEventListener('click', () => {
                     item.classList.toggle('fullscreen');
@@ -57,15 +61,33 @@ ipcRenderer.on('ping', (event, message) => {
                         document.body.appendChild(toggleStyle);
                     }
 
+                    function navigateContent() {
+                        console.log('Geklikte foto');
+                        // console.log('Foto voor geklikte foto');
+                        contentNavigation.style.display = 'block';
+
+                        previousContent.addEventListener('click', () => {
+                            console.log('Vorige foto');
+                            item.classList.toggle('fullscreen');
+                            elements[index - 1].classList.toggle('fullscreen');
+                        });
+
+                        nextContent.addEventListener('click', () => {
+                            console.log('Volgende foto');
+                        });
+                    }
+
                     if (toggled === false) {
                         addStyleString('video::-webkit-media-controls { bottom: 5vh; position: relative; } video::-webkit-media-controls-panel { background-image: linear-gradient(transparent, transparent) !important; }');
                         if (autoScrolling === true) {
                             pauseAutoScroll();
                             autoScrolling = false;
                         }
+                        // navigateContent();
                         toggled = true;
                     } else {
                         toggleStyle.innerHTML = '';
+                        contentNavigation.style.display = 'none';
                         toggled = false;
                     }
 
